@@ -29,7 +29,6 @@ function setupIntialValues() {
   let rate = document.getElementById("loan-rate");
   rate.value = 7.5;
   getCurrentUIValues();
-  // console.log(getCurrentUIValues());
   calculateMonthlyPayment(getCurrentUIValues());
 }
 
@@ -37,19 +36,21 @@ function setupIntialValues() {
 // Update the monthly payment
 function update() {
   getCurrentUIValues();
-  
-  updateMonthly();
+  updateMonthly(calculateMonthlyPayment(getCurrentUIValues()));
 }
 
 // Given an object of values (a value has amount, years and rate ),
 // calculate the monthly payment.  The output should be a string
 // that always has 2 decimal places.
 function calculateMonthlyPayment(values) {
-  let monthlyPayment = (values['amount'] * (values['rate'] / 100)) / (1 - ((1 + values['rate'] / 100)** (-1 * (12 * values['years']))))
-  console.log(monthlyPayment);
+  let monthlyPayment = (values['amount'] * ((values['rate'] / 100) / 12)) / (1 - Math.pow((1 + ((values['rate'] / 100) / 12)), (-(12 * values['years']))));
+  monthlyPayment = monthlyPayment.toFixed(2);
+  return monthlyPayment;
 }
 
 // Given a string representing the monthly payment value,
 // update the UI to show the value.
 function updateMonthly(monthly) {
+    let payment = document.getElementById("monthly-payment");
+    payment.innerText = `$${calculateMonthlyPayment(getCurrentUIValues())}`;
 }
